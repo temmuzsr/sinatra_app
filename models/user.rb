@@ -1,11 +1,10 @@
-
 class User < ActiveRecord::Base
 	has_many :carts
 	def authenticate(pass)
 		if self.password == pass
-		  true
+			true
 		else
-		  false
+			false
 		end
 	end
 

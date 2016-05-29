@@ -220,9 +220,6 @@ class SinatraApp < Sinatra::Base
 
 end
 
-
-
-
 # Rack::Builder.new do
 #   use Rack::Session::Cookie, :secret => "replace this with some secret key"
 
