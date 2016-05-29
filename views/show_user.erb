@@ -4,7 +4,7 @@
 
 	<p>Carts</p>
 	<ul>
-		<% @carts.each_with_index do |cart, index| %>
+		<% @user.carts.each_with_index do |cart, index| %>
 			<li>
 				<% cart.cart_items.each do |item| %>
 					<p><%= item.product.name %></p>

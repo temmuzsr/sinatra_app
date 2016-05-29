@@ -133,12 +133,14 @@ class SinatraApp < Sinatra::Base
   end
 
 	get "/users/:id/carts" do
-		if session[:cart_id]
-			@current_cart ||= Cart.find(session[:cart_id])
-		end
-		@user.carts << @current_cart
-		@user.save
-		redirect "/users/:id"
+		# if session[:cart_id]
+		# 	@current_cart ||= Cart.find(session[:cart_id])
+		# end
+		@user = User.find(params[:id])
+
+		# @user.carts << @current_cart
+		# @user.save
+		erb :show_user
 	end
 
 
@@ -201,19 +203,19 @@ class SinatraApp < Sinatra::Base
     puts params[:product_id]
     if @cart.cart_items.include?(@temp_item)
       @cart.cart_items.each do |item|
-	if item.id == @temp_item.id
-	  item.quantity +=  params[:quantity]
-	  item.save
-	end
-      end
+				if item.id == @temp_item.id
+				  item.quantity +=  params[:quantity]
+				  item.save
+				end
+    	end
     else
       @cart_item = CartItem.new
       @cart_item.product_id = params[:product_id]
       @cart_item.cart_id = @cart.id
       if params[:quantity].present?
-	@cart_item.quantity = params[:quantity]
+				@cart_item.quantity = params[:quantity]
       else
-	@cart_item.quantity = 1
+				@cart_item.quantity = 1
       end
       @cart_item.save
       @cart.cart_items << @cart_item
