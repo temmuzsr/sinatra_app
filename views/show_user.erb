@@ -3,16 +3,18 @@
 <% if @user.carts.present? %>
 
 	<p>Carts</p>
-	<ul>
-		<% @user.carts.each_with_index do |cart, index| %>
+	<% @user.carts.each_with_index do |cart, index| %>
+		Cart <%= index+1 %>:
+		<ul>
 			<li>
 				<% cart.cart_items.each do |item| %>
 					<p><%= item.product.name %></p>
 				<% end %>
 			</li>
-			<li><%= cart.total_price %></li>
-		<% end %>
-	</ul>
+			<li>Price:<%= cart.total_price %>TL</li>
+		</ul>
+	
+	<% end %>
 <% end %>
 
 

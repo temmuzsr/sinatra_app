@@ -198,13 +198,13 @@ class SinatraApp < Sinatra::Base
   post "/carts/:cart_id/products" do
     @cart = Cart.find(params[:cart_id])
     @cart.user = env['warden'].user
-    @temp_item = CartItem.find_by(product_id: params[:product_id])
+    @temp_item = CartItem.find_by(cart_id: params[:cart_id], product_id: params[:product_id])
     puts params[:cart_id]
     puts params[:product_id]
     if @cart.cart_items.include?(@temp_item)
       @cart.cart_items.each do |item|
 				if item.id == @temp_item.id
-				  item.quantity +=  params[:quantity]
+				  item.quantity +=  params[:quantity].to_i
 				  item.save
 				end
     	end
