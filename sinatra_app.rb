@@ -18,51 +18,51 @@ class SinatraApp < Sinatra::Base
 
 
 	use Warden::Manager do |config|
-	 	config.default_strategies :password
+		config.default_strategies :password
 		config.serialize_into_session{|user| user.id}
 		config.serialize_from_session{|id| User.find(id) }
 		config.failure_app = self
 	end
-	 
+	
 
- 	Warden::Manager.before_failure do |env,opts|
-    # Because authentication failure can happen on any request but
-    # we handle it only under "post '/auth/unauthenticated'", we need
-    # to change request to POST
-    env['REQUEST_METHOD'] = 'POST'
-    # And we need to do the following to work with  Rack::MethodOverride
-    env.each do |key, value|
-      env[key]['_method'] = 'post' if key == 'rack.request.form_hash'
-    end
-  end
+	Warden::Manager.before_failure do |env,opts|
+	    # Because authentication failure can happen on any request but
+	    # we handle it only under "post '/auth/unauthenticated'", we need
+	    # to change request to POST
+	    env['REQUEST_METHOD'] = 'POST'
+	    # And we need to do the following to work with  Rack::MethodOverride
+	    env.each do |key, value|
+	    	env[key]['_method'] = 'post' if key == 'rack.request.form_hash'
+	    end
+	end
 
 	Warden::Strategies.add(:password) do
 		def valid?
 			params['username'] && params['password']
 		end
 
-	  def authenticate!
-    	# u = User.authenticate(params['username'], params['password'])
-    	u = User.find_by(username: params['username'])
-    	if u.present?
-    		u.authenticate(params[:password])
-    	end
-    	u.nil? ? fail!("Could not log in") : success!(u)
-  	end
+		def authenticate!
+	    	# u = User.authenticate(params['username'], params['password'])
+	    	u = User.find_by(username: params['username'])
+	    	if u.present?
+	    		u.authenticate(params[:password])
+	    	end
+	    	u.nil? ? fail!("Could not log in") : success!(u)
+	    end
 	end
 
 	# ----
 
-  def current_cart
-	  if session[:cart_id]
-	    @current_cart ||= Cart.find(session[:cart_id])
-	  end
-	  if session[:cart_id].nil?
-	    @current_cart = Cart.create!
-	    session[:cart_id] = @current_cart.id
-	  end
-	 	@current_cart
-  end 
+	def current_cart
+		if session[:cart_id]
+			@current_cart ||= Cart.find(session[:cart_id])
+		end
+		if session[:cart_id].nil?
+			@current_cart = Cart.create!
+			session[:cart_id] = @current_cart.id
+		end
+		@current_cart
+	end 
 
 
 	get "/" do
@@ -71,20 +71,20 @@ class SinatraApp < Sinatra::Base
 
 	# --auth
 
-  post "/unauthenticated" do
-  	@error = "unauthenticated.Try again"
-    erb :index
-  end
+	post "/unauthenticated" do
+		@error = "unauthenticated.Try again"
+		erb :index
+	end
 
 	post "/auth/login" do
 		env['warden'].authenticate!
-	  if env['warden'].authenticated?
-	  	@user = env['warden'].user
-	    redirect "/users/#{@user.id}" 
-	  else
-	  	@error = "Try again"
-	    erb :index
-	  end
+		if env['warden'].authenticated?
+			@user = env['warden'].user
+			redirect "/users/#{@user.id}" 
+		else
+			@error = "Try again"
+			erb :index
+		end
 	end
 
 	get "/auth/logout" do
@@ -115,10 +115,10 @@ class SinatraApp < Sinatra::Base
 
 	get "/users/:id/carts" do
 		if session[:cart_id]
-	    @current_cart ||= Cart.find(session[:cart_id])
-	  end
-	  @user.carts << @current_cart
-	  @user.save
+			@current_cart ||= Cart.find(session[:cart_id])
+		end
+		@user.carts << @current_cart
+		@user.save
 		redirect "/users/:id"
 	end
 
@@ -132,13 +132,13 @@ class SinatraApp < Sinatra::Base
 
 	# --products
 	get "/products" do
-	  if session[:cart_id]
-	    @current_cart ||= Cart.find(session[:cart_id])
-	  end
-	  if session[:cart_id].nil?
-	    @current_cart = Cart.create!
-	    session[:cart_id] = @current_cart.id
-	  end
+		if session[:cart_id]
+			@current_cart ||= Cart.find(session[:cart_id])
+		end
+		if session[:cart_id].nil?
+			@current_cart = Cart.create!
+			session[:cart_id] = @current_cart.id
+		end
 		@products = Product.all
 		erb :index_products
 	end
