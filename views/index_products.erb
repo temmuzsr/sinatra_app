@@ -1,0 +1,18 @@
+<h1>Products</h1>
+
+
+<% @products.each do |product| %>
+	<p><%= product.name %>: <%= product.price %></p>
+
+	<form method="post" action="/carts/<%= @current_cart.id %>/products ">
+		<p><input type="hidden" name="product_id" value="<%= product.id %>"></p>
+		<p><input type="number" name="quantity" value="" placeholder="Quantity"></p>
+		<p class="submit"><input type="submit" name="commit" value="Add to Cart"></p>
+	</form>
+
+<% end %>
+<hr>
+
+
+
+<a href="/products">Go to products page"</a>

@@ -1,0 +1,20 @@
+<p>Hello <%= @user.username %></p>
+
+<% if @user.carts.present? %>
+
+	<p>Carts</p>
+	<ul>
+		<% @carts.each_with_index do |cart, index| %>
+			<li>
+				<% cart.cart_items.each do |item| %>
+					<p><%= item.product.name %></p>
+				<% end %>
+			</li>
+			<li><%= cart.total_price %></li>
+		<% end %>
+	</ul>
+<% end %>
+
+
+
+<a href="/products">Go to products page"</a>

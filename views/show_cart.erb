@@ -1,0 +1,29 @@
+<p>Cart Info</p>
+<ul>
+	<% @cart.cart_items.each_with_index do |cart_item, index| %>
+		<li>
+			Cart Item <%= index+1 %> : <%= cart_item.product.name %> (<%= cart_item.quantity %>)
+			<form action="/carts/<%= @cart.id %>/products/<%= cart_item.product_id %>" method="post">
+				<input type="hidden" name="_method" value="delete">
+				<input type='submit' value='delete'>
+			</form>
+			<p>
+			<form action="/carts/<%= @cart.id %>/products/<%= cart_item.product_id %>" method="post">
+				<input type="hidden" name="_method" value="put">
+				<input type="number" name="quantity" value="" placeholder="Quantity">
+				<input type="submit" value="Update Quantity">
+			</form>
+			<p>
+		</li>
+		<hr>
+	<% end %>
+</ul>
+<p>Total Price: <%= @price %>TL</p>
+
+<form action="/carts/<%= @cart.id %>/clean" method="post">
+	<input type="hidden" name="_method" value="put">
+	<input type='submit' value='clean'>
+</form>
+
+
+<a href="/products">Go to products page"</a>

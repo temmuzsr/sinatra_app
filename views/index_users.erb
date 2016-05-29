@@ -1,0 +1,16 @@
+<h1>Users</h1>
+
+<% @users.each do |user| %>
+<p><%= user.username %></p>
+<% end %>
+
+<p>User Create Form</p>
+<form method="post" action="/users">
+	<p><input type="text" name="username" value="" placeholder="Username"></p>
+	<p><input type="password" name="password" value="" placeholder="Password"></p>
+	<p class="submit"><input type="submit" name="commit" value="Create User"></p>
+</form>
+
+
+
+<a href="/products">Go to products page"</a>

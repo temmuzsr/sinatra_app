@@ -1,0 +1,7 @@
+
+<% if env['warden'].user.present? %>
+	<i><%= env['warden'].user.username %> logged in.</i>
+<% end %>
+<p><%= @success %></p>
+<p><%= @error %></p>
+<%= yield %>
